@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ChartOne from "../Charts/ChartOne";
 import ChartThree from "../Charts/ChartThree";
 import ChartTwo from "../Charts/ChartTwo";
@@ -9,6 +9,35 @@ import CardDataStats from "../CardDataStats";
 import MapOne from "../Maps/MapOne";
 
 const ECommerce: React.FC = () => {
+  const [data, setData] = useState([
+    { title: "Capteur Temp", total: "34 F", rate: "0.43%" },
+    { title: "Capteur Humidty", total: "434", rate: "4.35%" },
+    { title: "Capteur sormk", total: "2.450", rate: "2.59%" },
+    { title: "Caputerzbi", total: "3.456", rate: "0.95%" }
+  ]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setData(prevData =>
+        prevData.map(item => ({
+          ...item,
+          total: randomizeValue(item.total),
+          rate: randomizeValue(item.rate)
+        }))
+      );
+    }, 400);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const randomizeValue = (value: string) => {
+    const currentValue = parseFloat(value.replace(/[^\d.-]/g, ""));
+    const randomChange = (Math.random() * 0.05 - 0.025) * currentValue; // Change up to 5% of current value
+    const newValue = currentValue + randomChange;
+    return newValue.toFixed(value.includes(".") ? 2 : 0);
+  };
+
+  
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
